@@ -301,9 +301,13 @@ function open(file) {
 
 // Runs fn inside BEGIN IMMEDIATE ... COMMIT. IMMEDIATE takes the write lock up
 // front, so two processes can never both read "slot is free" and then both write.
+// Nested calls join the outer transaction. We track this ourselves because
+// DatabaseSync#isTransaction only exists in Node 22.16 and later.
+const openTx = new WeakSet();
 function tx(db, fn) {
-  if (db.isTransaction) return fn();
+  if (openTx.has(db)) return fn();
   db.exec('BEGIN IMMEDIATE');
+  openTx.add(db);
   try {
     const out = fn();
     db.exec('COMMIT');
@@ -311,6 +315,8 @@ function tx(db, fn) {
   } catch (err) {
     try { db.exec('ROLLBACK'); } catch { /* already rolled back */ }
     throw err;
+  } finally {
+    openTx.delete(db);
   }
 }
 
