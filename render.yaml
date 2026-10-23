@@ -1,0 +1,18 @@
+# One-click test site on Render.com (free plan): runs the demo school with
+# made-up families. The free plan sleeps when idle and resets the demo data
+# on each restart. Do not load real family data on this setup.
+services:
+  - type: web
+    name: ptc-scheduler-demo
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm run demo
+    healthCheckPath: /api/me
+    envVars:
+      - key: NODE_VERSION
+        value: "22.13.1"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: SCHOOL_NAME
+        value: Lincoln Middle School

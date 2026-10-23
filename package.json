@@ -1,0 +1,26 @@
+{
+  "name": "ptc-scheduler",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Parent-teacher conference scheduler: parents self-book, teachers see their day, admins upload SIS reports.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "demo": "node --disable-warning=ExperimentalWarning scripts/demo.js",
+    "test": "node --disable-warning=ExperimentalWarning --test --test-concurrency=1 \"test/*.test.js\"",
+    "test:e2e": "node --disable-warning=ExperimentalWarning --test \"e2e/*.test.js\""
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "nodemailer": "^10.0.15"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
+  }
+}
